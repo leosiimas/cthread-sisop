@@ -15,19 +15,28 @@ LIB_DIR=./lib
 INC_DIR=./include
 BIN_DIR=./bin
 SRC_DIR=./src
+ifdef DEBUG
+C_FLAGS=-Wall -m32 -DDEBUG
+else
+C_FLAGS=-Wall -m32
+endif
 
-all: regra1 regra2 regran
+OBJS=$(patsubst $(SRC_DIR)/%.c, $(BIN_DIR)/%.o, $(wildcard $(SRC_DIR)/*.c))
 
-regra1: #dependências para a regra1
-	$(CC) -o $(BIN_DIR)regra1 $(SRC_DIR)regra1.c -Wall
+all: build_lib
+	echo $(OBJS)
+	make -C testes/ all
 
-regra2: #dependências para a regra2
-	$(CC) -o $(BIN_DIR)regra2 $(SRC_DIR)regra2.c -Wall
+$(BIN_DIR)/%.o: $(SRC_DIR)/%.c
+	$(CC) -c -o $@ $< $(C_FLAGS)
 
-regran: #dependências para a regran
-	$(CC) -o $(BIN_DIR)regran $(SRC_DIR)regran.c -Wall
+   
+build_lib: $(OBJS)
+	mkdir -p $(LIB_DIR)
+	ar crs $(LIB_DIR)/libcthread.a $(BIN_DIR)/*.o 
 
 clean:
-	rm -rf $(LIB_DIR)/*.a $(BIN_DIR)/*.o $(SRC_DIR)/*~ $(INC_DIR)/*~ *~
+	rm -rf $(LIB_DIR)/*.a $(SRC_DIR)/*~ $(INC_DIR)/*~ *~ .*~ *.sw?
+	(find bin/ -type f -printf "$(BIN_DIR)/%P\n"; echo $(BIN_DIR)/support.o) | sort | uniq -u | xargs -r rm
 
-
+.PHONY: clean build-lib all
