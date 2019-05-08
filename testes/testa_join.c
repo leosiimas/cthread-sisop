@@ -10,7 +10,7 @@ int main() {
 
 	int thread1 = ccreate(mythread, (void*)1, 0);
 	printf("Thread 1 created\n");
-	int thread2 = ccreate(mythread, (void*)2, 2);
+	int thread2 = ccreate(mythread, (void*)2, 0);
 	printf("Thread 2 created\n");
 
 	cjoin(thread1);
@@ -36,10 +36,10 @@ void* mythread(void* arg) {
 void* mythread_low(void* arg) {
 	int i=0;
 
-	csetprio(0, 0);
+	//csetprio(0, 0);
 
 	for( i=0; i<5; i++ ) {
-		printf("mytrhead %d: hello world (%d)\n", (int)arg, i+1);
+		printf("mytrhead %d: hello world 2 (%d)\n", (int)arg, i+1);
 		cyield();
 	}
 

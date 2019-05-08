@@ -4,20 +4,10 @@
 // Função schedule, principal função qe
 
 int cthread_schedule(TCB_t* current_thread, int block) {
+	
+	
 	int fifo_i=0;
-
-	// move threads criados para fila de aptos
-	FirstFila2(&cthread_created_fifo);
-	TCB_t* next_created_thread;
-	while( (next_created_thread = (TCB_t*)GetAtIteratorFila2(&cthread_created_fifo)) != NULL ) {
-		// move para fifo de prioridade correspondente
-		int priority = next_created_thread->prio;
-		AppendFila2(&cthread_priority_fifos[priority], (void*)next_created_thread);
-		DeleteAtIteratorFila2(&cthread_created_fifo);
-		next_created_thread->state = CTHREAD_STATE_APTO;
-		DEBUG_PRINT("Moved created thread %d (%p) to priority queue %d\n", next_created_thread->tid, next_created_thread, priority);
-	}
-
+	
 	// coloca anterior na respectiva fila
 	if( current_thread != NULL && !block) {
 		current_thread->state = CTHREAD_STATE_APTO;

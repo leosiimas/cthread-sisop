@@ -19,8 +19,6 @@ void* func0(void *arg) {
         d0 = d0 + 1;
         if (d0 = 5)
         {
-
-            csetprio(3, 1);
             cyield();
             d0 = 0;
         }
@@ -42,6 +40,8 @@ int main(int argc, char *argv[]) {
 
 	id0 = ccreate(func0, (void *)&i, 0);	
     id1 = ccreate(func1, (void *)&i, 0);
+
+    cjoin(id0);
 
 }
 
