@@ -14,7 +14,7 @@ int ccreate (void* (*start)(void*), void *arg, int prio) {
 	int tid = thread_info->tid = cthread_next_id++;
 	thread_info->state = CTHREAD_STATE_CREATION;
 	thread_info->prio = prio;
-	thread_info->data = NULL;
+
 
 	if( getcontext(&(thread_info->context)) != 0) {
 		return -1;
@@ -30,13 +30,17 @@ int ccreate (void* (*start)(void*), void *arg, int prio) {
 
 	// cria a thread para a main como solicitado
 	cthread_create_main_thread();
+
+	// escalona thread se nova prioridade maior
+	if( cthread_executing_thread == NULL || prio < cthread_executing_thread->prio ) {
+		cthread_schedule(cthread_executing_thread, 0);
+	}
 	
 	return tid;
 }
 
 TCB_t* cthread_create_main_thread() {
 	if( !cthread_inicializado ) {
-		
 		///// obtém contexto da main
 		// cria novo TCB
 		
@@ -56,8 +60,8 @@ TCB_t* cthread_create_main_thread() {
 }
 
 int cthread_add_thread(TCB_t* thread_info) {
-	// coloca na fila de aptos
-	AppendFila2(&cthread_apto_fifo, (void*) thread_info);
+	// coloca na fila de criados
+	AppendFila2(&cthread_created_fifo, (void*) thread_info);
 	return 0;
 }
 
@@ -71,7 +75,7 @@ int cthread_init() {
 		}
 		// inicializa fila de criação
 		DEBUG_PRINT("Creating 'created' fifo.\n");
-		CreateFila2(&cthread_apto_fifo);
+		CreateFila2(&cthread_created_fifo);
 		// cria contexto de teminação
 		DEBUG_PRINT("Creating termination context.\n");
 		getcontext(&cthread_termination_context);
@@ -85,14 +89,7 @@ int cthread_init() {
 }
 
 void cthread_terminate() {
-
-	// se algum thread esperando join, recoloca na fifo de aptors
-	if( cthread_executing_thread->data != NULL ) {
-		TCB_t* joined_thread = (TCB_t*)cthread_executing_thread->data;
-		joined_thread->state = CTHREAD_STATE_APTO;
-		AppendFila2(&cthread_priority_fifos[joined_thread->tid], (void*)joined_thread);
-	}
-
+	
 	// libera memoria da stack
 	assert(cthread_executing_thread->tid != 0);
 	free((cthread_executing_thread->context).uc_stack.ss_sp);
