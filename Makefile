@@ -34,8 +34,10 @@ build_lib: $(OBJS)
 	mkdir -p $(LIB_DIR)
 	ar crs $(LIB_DIR)/libcthread.a $(BIN_DIR)/*.o 
 
+
+
 clean:
 	rm -rf $(LIB_DIR)/*.a $(SRC_DIR)/*~ $(INC_DIR)/*~ *~ .*~ *.sw?
 	(find bin/ -type f -printf "$(BIN_DIR)/%P\n"; echo $(BIN_DIR)/support.o) | sort | uniq -u | xargs -r rm
 
-.PHONY: clean build-lib all
+.PHONY: clean build-lib all 
