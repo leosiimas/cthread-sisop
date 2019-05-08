@@ -1,6 +1,8 @@
 #include "../include/cthread_lib.h"
 #include <stdio.h>
 
+// Função schedule, principal função qe
+
 int cthread_schedule(TCB_t* current_thread, int block) {
 	int fifo_i=0;
 
