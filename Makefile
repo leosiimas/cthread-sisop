@@ -25,7 +25,6 @@ OBJS=$(patsubst $(SRC_DIR)/%.c, $(BIN_DIR)/%.o, $(wildcard $(SRC_DIR)/*.c))
 
 all: build_lib
 	echo $(OBJS)
-	make -C testes/ all
 
 $(BIN_DIR)/%.o: $(SRC_DIR)/%.c
 	$(CC) -c -o $@ $< $(C_FLAGS)

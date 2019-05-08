@@ -1,5 +1,6 @@
 #include "../include/cthread_lib.h"
 #include <stdio.h>
+#include <assert.h>
 
 //Função ccreate, cria uma nova thread escalonando sua posição de acordo com sua priordade
 
@@ -62,4 +63,43 @@ int cthread_add_thread(TCB_t* thread_info) {
 	// coloca na fila de criados
 	AppendFila2(&cthread_created_fifo, (void*) thread_info);
 	return 0;
+}
+
+int cthread_init() {
+	if( !cthread_inicializado ) {
+		int i;
+		// iniciliza filas de prioridade
+		for(i = 0; i<CTHREAD_NUM_PRIORITY_LEVELS; i++) {
+			DEBUG_PRINT("Creating fifo %d\n", i);
+			CreateFila2(&cthread_priority_fifos[i]);
+		}
+		// inicializa fila de criação
+		DEBUG_PRINT("Creating 'created' fifo.\n");
+		CreateFila2(&cthread_created_fifo);
+		// cria contexto de teminação
+		DEBUG_PRINT("Creating termination context.\n");
+		getcontext(&cthread_termination_context);
+		cthread_termination_context.uc_stack.ss_sp = malloc(CTHREAD_STACK_SIZE);
+		cthread_termination_context.uc_stack.ss_size = CTHREAD_STACK_SIZE;
+		cthread_termination_context.uc_link = NULL;	
+		makecontext(&cthread_termination_context, cthread_terminate, 0);
+	}
+
+	return 0;
+}
+
+void cthread_terminate() {
+	
+	// libera memoria da stack
+	assert(cthread_executing_thread->tid != 0);
+	free((cthread_executing_thread->context).uc_stack.ss_sp);
+	(cthread_executing_thread->context).uc_stack.ss_size = 0;
+	// libera TCB
+	free(cthread_executing_thread);
+	cthread_executing_thread = NULL;
+	// escalona proximo thread
+	cthread_schedule(cthread_executing_thread, 0);
+
+	assert(0);
+
 }
