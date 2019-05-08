@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "cthread_lib.h": "c",
+        "cthread.h": "c"
+    }
+}
