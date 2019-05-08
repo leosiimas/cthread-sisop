@@ -5,18 +5,26 @@
 // Função cjoin, faz a sincronização das threads
 
 int cjoin(int tid) {
-	
+
+	// acha thread
 	TCB_t* thread = cthread_find_thread(tid);
 	if( thread == NULL ) {
 		return -1;
 	}
 
-	cthread_executing_thread->state = CTHREAD_STATE_BLOCK;    
+	// verifica se já há outra esperando
+	if( thread->data != NULL ) {
+		return -1;
+	}
+
+	// bloqueia thread
+	DEBUG_PRINT("thread %d waiting for thread %d\n", cthread_executing_thread->tid, tid);
+	cthread_executing_thread->state = CTHREAD_STATE_BLOCK;
+	thread->data = (void*) cthread_executing_thread;
 	cthread_schedule(cthread_executing_thread, 1);
 
 	return 0;
 }
-
 TCB_t* cthread_find_thread(int tid) {
 	// procura nas threads criadas
 	TCB_t* next_thread = NULL;

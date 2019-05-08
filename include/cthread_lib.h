@@ -59,8 +59,11 @@ extern int cthread_inicializado;
 
 // filas de prioridade
 extern FILA2 cthread_priority_fifos[CTHREAD_NUM_PRIORITY_LEVELS];
-// fila de criação
-extern FILA2 cthread_created_fifo;
+
+// fila de apto
+extern FILA2 cthread_apto_fifo;
+
+
 // thread em execução
 extern TCB_t* cthread_executing_thread;
 

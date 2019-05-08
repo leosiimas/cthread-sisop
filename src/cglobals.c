@@ -9,8 +9,8 @@ int cthread_inicializado = 0;
 // filas de prioridade
 FILA2 cthread_priority_fifos[CTHREAD_NUM_PRIORITY_LEVELS];
 
-// fila de criação
-FILA2 cthread_created_fifo;
+// fila de apto
+FILA2 cthread_apto_fifo;
 
 // thread em execução
 TCB_t* cthread_executing_thread = NULL;
