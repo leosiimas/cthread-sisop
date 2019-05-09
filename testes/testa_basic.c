@@ -1,3 +1,8 @@
+
+
+// Programa que testa as funcoes Ccreate, Cjoin, Csetprio e Cyield
+
+
 #define DEBUG
 #include "../include/cthread.h"
 #include <stddef.h>
@@ -14,7 +19,6 @@ int main() {
 	printf("Thread 2 created\n");
 
 	cjoin(thread1);
-	cjoin(thread2);
 
 	printf("I'm back!\n");
 

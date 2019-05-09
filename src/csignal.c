@@ -38,7 +38,7 @@ int csignal(csem_t *sem) {
 
 		// se prioridade maior, reescalona
 		if( next->prio < cthread_executing_thread->prio ) {
-			cthread_schedule(cthread_executing_thread, 0);
+			schedule(cthread_executing_thread, 0);
 		}
 
 	}

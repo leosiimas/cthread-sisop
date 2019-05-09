@@ -1,9 +1,9 @@
 #include "../include/cthread_lib.h"
 #include <stdio.h>
 
-// Função schedule, principal função qe
+// Função schedule, principal função que define qual thread estara em execucao e o que fazer com as que saem de execucao
 
-int cthread_schedule(TCB_t* current_thread, int block) {
+int schedule(TCB_t* current_thread, int block) {
 	
 	
 	int fifo_i=0;
@@ -21,32 +21,33 @@ int cthread_schedule(TCB_t* current_thread, int block) {
 	}
 	if( fifo_i < CTHREAD_NUM_PRIORITY_LEVELS ) {
 		next_thread = (TCB_t*)GetAtIteratorFila2(&cthread_priority_fifos[fifo_i]);
-		DEBUG_PRINT("next thread: %p\n", next_thread);
 	}
 
 	
 	if( next_thread != NULL ) {
+
 		// coloca como thread em execução
 		cthread_executing_thread = next_thread;
+
 		// remove novo da fila
 		DeleteAtIteratorFila2(&(cthread_priority_fifos[fifo_i]));
+
 		if( current_thread != NULL ) {
+
 			// swap contexts
-			DEBUG_PRINT("Swapping contexts from thread %d to thread %d!\n", current_thread->tid, next_thread->tid);
 			current_thread->state = CTHREAD_STATE_EXEC;
 			if( swapcontext( &(current_thread->context), &(next_thread->context) ) != 0 ) {
 				return -1;
 			}
 		} else {
+
 			// set context
-			DEBUG_PRINT("Swapping context from terminated thread to thread %d!\n", next_thread->tid);
 			if( setcontext( &(next_thread->context) ) != 0 ) {
 				return -1;
 			}
 		}
 
 	} else {
-		DEBUG_PRINT("next thread is NULL!!\n");
 		// continua current thread (não faz nada)
 	}
 

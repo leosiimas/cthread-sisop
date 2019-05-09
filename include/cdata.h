@@ -26,9 +26,7 @@ typedef struct s_TCB {
 	
 	/* A PARTIR DESSE PONTO PODEM SER ACRESCENTADOS CAMPOS NECESS�RIOS AO DESENVOLVIMENTO DA BIBLIOTECA
 	*/
-
-	void		*data;	// aponta estruturas de dados, associadas � thread, necess�rias � implementa��o 
-	
+	void	*data;	// Implementação da variavel nescessara para auxiliar a execução.
 } TCB_t; 
 
 

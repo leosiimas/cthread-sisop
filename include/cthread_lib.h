@@ -24,26 +24,19 @@
 #define CTHREAD_STACK_SIZE		16*1024			// 16Kb
 
 
-///// macros
-#ifdef DEBUG
-#define DEBUG_PRINT(...) do{ fprintf( stderr, __VA_ARGS__  );  } while( 0 )
-#else
-#define DEBUG_PRINT(...) do{  } while ( 0 )
-#endif
+///// funções internas da biblioteca //////
 
-
-/////// funções internas da biblioteca ///////////
 // inicializa cthread
 void cthread_init();
 
 // cria contexto da main
-TCB_t* cthread_create_main_thread();
+TCB_t* create_main_thread();
 
 // adiciona novo thread na fila de sua prioridade
 void cthread_priorty_thread(TCB_t* thread_info);
 
 // escalona proximo thread
-int cthread_schedule(TCB_t* current_thread, int block);
+int schedule(TCB_t* current_thread, int block);
 
 // termina thread atual
 void cthread_terminate();
@@ -57,10 +50,8 @@ TCB_t* cthread_find_thread(int tid);
 // bloqueia processo esperando recurso
 int cthread_sem_block(csem_t* sem);
 
-// libera processo esperando recurso
-int cthread_sem_wakeup(csem_t* sem, PFILA2 filaPrio);
-
 /////// variaveis internas da cthread ////////
+
 // indica se cthread foi inicializado
 extern int cthread_inicializado;
 
@@ -69,7 +60,6 @@ extern FILA2 cthread_priority_fifos[CTHREAD_NUM_PRIORITY_LEVELS];
 
 // fila de apto
 extern FILA2 cthread_created_fifo;
-
 
 // thread em execução
 extern TCB_t* cthread_executing_thread;

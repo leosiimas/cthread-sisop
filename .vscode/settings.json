@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "cthread_lib.h": "c",
-        "cthread.h": "c"
+        "cthread.h": "c",
+        "stdio.h": "c"
     }
 }
