@@ -6,10 +6,7 @@ CC=gcc
 LIB_DIR=../lib
 CFLAGS=-lcthread -Wall -m32
 
-all: testa_cyeld testa_basic testa_setprio testa_cjoin testa_semaforo testa_semaforo2 testa_semaforo3 testa_semaforo4
-
-testa_cyeld: testa_cyeld.c $(LIB_DIR)/libcthread.a
-	$(CC) -o testa_cyeld testa_cyeld.c -L$(LIB_DIR) $(CFLAGS)
+all: testa_basic testa_setprio testa_cjoin testa_semaforo testa_semaforo2 testa_semaforo3 testa_semaforo4
 
 testa_setprio: testa_setprio.c $(LIB_DIR)/libcthread.a
 	$(CC) -o testa_setprio testa_setprio.c -L$(LIB_DIR) $(CFLAGS)
@@ -33,6 +30,6 @@ testa_semaforo4: testa_semaforo4.c $(LIB_DIR)/libcthread.a
 	$(CC) -o testa_semaforo4 testa_semaforo4.c -L$(LIB_DIR) $(CFLAGS)
 	
 clean:
-	rm -rf testa_cyeld testa_cjoin testa_setprio testa_basic testa_semaforo testa_semaforo2 testa_semaforo3 testa_semaforo4
+	rm -rf testa_cjoin testa_setprio testa_basic testa_semaforo testa_semaforo2 testa_semaforo3 testa_semaforo4
 	
 .PHONY: clean build-lib all
