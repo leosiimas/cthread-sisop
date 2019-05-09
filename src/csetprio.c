@@ -4,9 +4,7 @@
 
 // Função csetprio, altera a prioridade da thread
 
-int csetprio(int tid, int prio) {
-
-	tid = NULL;
+int csetprio(int tid , int prio) {
 
 	if (prio < CTHREAD_NUM_PRIORITY_LEVELS ){
 		cthread_executing_thread->prio = prio;

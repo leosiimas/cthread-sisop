@@ -38,7 +38,7 @@ int ccreate (void* (*start)(void*), void *arg, int prio) {
 }
 
 
-int cthread_priorty_thread(TCB_t* thread_info) {
+void cthread_priorty_thread(TCB_t* thread_info) {
 
 	// move para fifo de prioridade correspondente
 	int priority = thread_info->prio;
@@ -65,7 +65,7 @@ TCB_t* cthread_create_main_thread() {
 	return &cthread_main_thread;	
 }
 
-int cthread_init() {
+void cthread_init() {
 	 
 	int i;
 	// iniciliza filas de prioridade
@@ -73,15 +73,19 @@ int cthread_init() {
 		DEBUG_PRINT("Creating fifo %d\n", i);
 		CreateFila2(&cthread_priority_fifos[i]);
 	}
+
 	// inicializa fila de criação
 	DEBUG_PRINT("Creating 'created' fifo.\n");
 	CreateFila2(&cthread_created_fifo);
+
 	// cria contexto de teminação
 	DEBUG_PRINT("Creating termination context.\n");
 	getcontext(&cthread_termination_context);
+
 	cthread_termination_context.uc_stack.ss_sp = malloc(CTHREAD_STACK_SIZE);
 	cthread_termination_context.uc_stack.ss_size = CTHREAD_STACK_SIZE;
 	cthread_termination_context.uc_link = NULL;	
+	
 	makecontext(&cthread_termination_context, cthread_terminate, 0);
 	
 }

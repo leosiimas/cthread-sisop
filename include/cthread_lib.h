@@ -34,22 +34,29 @@
 
 /////// funções internas da biblioteca ///////////
 // inicializa cthread
-int cthread_init();
+void cthread_init();
+
 // cria contexto da main
 TCB_t* cthread_create_main_thread();
-// adiciona novo thread
-int cthread_add_thread(TCB_t* thread_info);
+
+// adiciona novo thread na fila de sua prioridade
+void cthread_priorty_thread(TCB_t* thread_info);
+
 // escalona proximo thread
 int cthread_schedule(TCB_t* current_thread, int block);
+
 // termina thread atual
 void cthread_terminate();
+
 // checa se a prioridade maior que a dada
 int cthread_check_priority(int prio);
+
 // acha thread com dado tid
 TCB_t* cthread_find_thread(int tid);
 
 // bloqueia processo esperando recurso
 int cthread_sem_block(csem_t* sem);
+
 // libera processo esperando recurso
 int cthread_sem_wakeup(csem_t* sem, PFILA2 filaPrio);
 
